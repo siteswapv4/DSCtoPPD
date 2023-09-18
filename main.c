@@ -259,6 +259,7 @@ int main(int argc, char** argv)
 
     initChart(&chart);
 
+    mkdir(path.outputFolderPath, 0777);
     mkdir(path.projectPath, 0777);
     writeLayer(path.filePath, path.layerPath, &chart);
     writeBPM(path.bpmPath, &chart);
