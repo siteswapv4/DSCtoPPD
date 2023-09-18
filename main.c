@@ -10,7 +10,7 @@
 #include "functions.c"
 
 #ifdef _WIN32
-# define mkdir(X, Y) _mkdir(X)
+# define mkdir(X, Y) mkdir(X)
 #endif
 
 typedef struct
@@ -53,6 +53,7 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
     if (argc > 0)
     {
         path->folderPath = extractFolderPath(argv[0]);
+
 
         if (argc > 1)
         {
@@ -97,8 +98,6 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
             path->projectPath = (char*)malloc((strlen(path->outputFolderPath) + strlen(path->filename) + 100) * sizeof(char)); path->projectPath[0] = 0;
             strcat(path->projectPath, path->outputFolderPath); strcat(path->projectPath, "/"); strcat(path->projectPath, path->filename);
 
-            printf("%s\n", path->outputFolderPath);
-
             path->ppdprojPath = (char*)malloc((strlen(path->projectPath) + strlen(path->filename) + 100) * sizeof(char)); path->ppdprojPath[0] = 0;
             strcat(path->ppdprojPath, path->projectPath); strcat(path->ppdprojPath, ".ppdproj");
 
@@ -116,7 +115,7 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
 
             path->ppdPath = (char*)malloc((strlen(path->projectPath) + 20) * sizeof(char)); path->ppdPath[0] = 0;
             strcat(path->ppdPath, path->projectPath); strcat(path->ppdPath, "/"); strcat(path->ppdPath, path->difficultyChar); strcat(path->ppdPath, ".ppd");
-
+            
             path->csinputPath = (char*)malloc((strlen(path->folderPath) + 50) * sizeof(char)); path->csinputPath[0] = 0;
             strcat(path->csinputPath, path->folderPath); strcat(path->csinputPath, "Data/CSInput.fsml");
 
