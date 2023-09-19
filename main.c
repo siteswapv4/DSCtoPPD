@@ -47,6 +47,8 @@ Fills path strings by extracting the current folder location
 */
 int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
 {
+    path->folderPath = path->projectPath = path->filePath = path->filename = path->layerPath = path->bpmPath = path->iniPath = path->evdPath = path->evdPath = path->ppdPath = path->csinputPath = path->divascriptPath = path->targetDivascriptPath = path->targetCsinputPath = path->targetLayerPath = path->scriptFolderPath = path->layerFolderPath = path->soundFolderPath = path->ressourceFolderPath = path->soundsetPath = path->targetSoundsetPath = path->soundPath = path->targetSoundPath = path->ppdprojPath = path->outputFolderPath = path->difficultyChar = NULL;
+
     path->difficultyChar = path->outputFolderPath = path->ppdprojPath = path->targetSoundsetPath = path->soundsetPath = path->soundPath = path->targetDivascriptPath = path->targetCsinputPath = path-> targetLayerPath = path->scriptFolderPath = path-> layerFolderPath = path-> soundFolderPath = path->ressourceFolderPath = path->folderPath = path->filePath = path->filename = path->ppdPath = path->layerPath = path->projectPath = path->bpmPath = path->iniPath = path->csinputPath = path->divascriptPath = path->evdPath = NULL;
 
     //add path
@@ -202,6 +204,14 @@ int freePath(Tpath* path)
     {
         free(path->iniPath);
     }
+    if (path->evdPath != NULL)
+    {
+        free(path->evdPath);
+    }
+    if (path->ppdPath != NULL)
+    {
+        free(path->ppdPath);
+    }
     if (path->csinputPath != NULL)
     {
         free(path->csinputPath);
@@ -210,13 +220,61 @@ int freePath(Tpath* path)
     {
         free(path->divascriptPath);
     }
-    if (path->evdPath != NULL)
+    if (path->targetDivascriptPath != NULL)
     {
-        free(path->evdPath);
+        free(path->targetDivascriptPath);
     }
-    if (path->ppdPath != NULL)
+    if (path->targetCsinputPath != NULL)
     {
-        free(path->ppdPath);
+        free(path->targetCsinputPath);
+    }
+    if (path->targetLayerPath != NULL)
+    {
+        free(path->targetLayerPath);
+    }
+    if (path->scriptFolderPath != NULL)
+    {
+        free(path->scriptFolderPath);
+    }
+    if (path->layerFolderPath != NULL)
+    {
+        free(path->layerFolderPath);
+    }
+    if (path->soundFolderPath != NULL)
+    {
+        free(path->soundFolderPath);
+    }
+    if (path->ressourceFolderPath != NULL)
+    {
+        free(path->ressourceFolderPath);
+    }
+    if (path->soundsetPath != NULL)
+    {
+        free(path->soundsetPath);
+    }
+    if (path->targetSoundsetPath != NULL)
+    {
+        free(path->targetSoundsetPath);
+    }
+    if (path->soundPath != NULL)
+    {
+        free(path->soundPath);
+    }
+    if (path->targetSoundPath != NULL)
+    {
+        free(path->targetSoundPath);
+    }
+    if (path->ppdprojPath != NULL)
+    {
+        free(path->ppdprojPath);
+    }
+    if (path->outputFolderPath != NULL)
+    {
+        free(path->outputFolderPath);
+    }
+    if (path->difficultyChar != NULL)
+    {
+        free(path->difficultyChar);
     }
 
     return 0;
@@ -233,7 +291,7 @@ int main(int argc, char** argv)
     {
         printf("Input number;\n1 : PPD project\n2 : PPD layer file (no BPM changes will be ported)\n3 : PPD score (playable chart)\n");
         if (scanf("%d",&operation) != 1) {
-            printf("Wrong input");
+            printf("Wrong input\n");
             return 1;
         }
         fflush(stdin);
@@ -244,7 +302,7 @@ int main(int argc, char** argv)
     {
         printf("Input number;\n1 : Easy\n2 : Normal\n3 : Hard\n4 : Extreme\n5 : Base\n");
         if (scanf("%d",&difficulty) != 1) {
-            printf("Wrong input");
+            printf("Wrong input\n");
             return 1;
         }
         fflush(stdin);
