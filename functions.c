@@ -243,15 +243,19 @@ void convertTarget(FILE* dsc, Tnote* note, Tchart* chart, signed int* hex, float
     {
         //convert types
         case 0:
+        case 18:
             note->type = 3;
             break;
         case 1:
+        case 19:
             note->type = 2;
             break;
         case 2:
+        case 20:
             note->type = 1;
             break;
         case 3:
+        case 21:
             note->type = 0;
             break;
         case 4:
@@ -270,6 +274,7 @@ void convertTarget(FILE* dsc, Tnote* note, Tchart* chart, signed int* hex, float
             note->type = 20;
             chart->isHold = true;
             break;
+        case 23:
         case 12:
             if (chart->isSlideL)
             {
@@ -281,6 +286,7 @@ void convertTarget(FILE* dsc, Tnote* note, Tchart* chart, signed int* hex, float
                 chart->isSlideL = true;
             }
             break;
+        case 24:
         case 13:
             if (chart->isSlideR)
             {
