@@ -471,6 +471,7 @@ int writeLayer(char* DSCPath, char* layerFilePath, Tchart* chart)
     }
 
     chart->offset += chart->customOffset;
+    chart->offset -= 0.06;
 
     //return to the start
     fseek(dsc, 4, SEEK_SET);

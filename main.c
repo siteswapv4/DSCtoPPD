@@ -24,10 +24,12 @@ typedef struct
     char* iniPath;
     char* evdPath;
     char* ppdPath;
+    char* scdPath;
     char* csinputPath;
     char* divascriptPath;
     char* targetDivascriptPath;
     char* targetCsinputPath;
+    char* targetBpmPath;
     char* targetLayerPath;
     char* scriptFolderPath;
     char* layerFolderPath;
@@ -35,6 +37,7 @@ typedef struct
     char* ressourceFolderPath;
     char* soundsetPath;
     char* targetSoundsetPath;
+    char* targetScdPath;
     char* soundPath;
     char* targetSoundPath;
     char* ppdprojPath;
@@ -47,7 +50,7 @@ Fills path strings by extracting the current folder location
 */
 int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
 {
-    path->folderPath = path->projectPath = path->filePath = path->filename = path->layerPath = path->bpmPath = path->iniPath = path->evdPath = path->evdPath = path->ppdPath = path->csinputPath = path->divascriptPath = path->targetDivascriptPath = path->targetCsinputPath = path->targetLayerPath = path->scriptFolderPath = path->layerFolderPath = path->soundFolderPath = path->ressourceFolderPath = path->soundsetPath = path->targetSoundsetPath = path->soundPath = path->targetSoundPath = path->ppdprojPath = path->outputFolderPath = path->difficultyChar = NULL;
+    path->scdPath = path->targetScdPath = path->targetBpmPath = path->folderPath = path->projectPath = path->filePath = path->filename = path->layerPath = path->bpmPath = path->iniPath = path->evdPath = path->evdPath = path->ppdPath = path->csinputPath = path->divascriptPath = path->targetDivascriptPath = path->targetCsinputPath = path->targetLayerPath = path->scriptFolderPath = path->layerFolderPath = path->soundFolderPath = path->ressourceFolderPath = path->soundsetPath = path->targetSoundsetPath = path->soundPath = path->targetSoundPath = path->ppdprojPath = path->outputFolderPath = path->difficultyChar = NULL;
 
     path->difficultyChar = path->outputFolderPath = path->ppdprojPath = path->targetSoundsetPath = path->soundsetPath = path->soundPath = path->targetDivascriptPath = path->targetCsinputPath = path-> targetLayerPath = path->scriptFolderPath = path-> layerFolderPath = path-> soundFolderPath = path->ressourceFolderPath = path->folderPath = path->filePath = path->filename = path->ppdPath = path->layerPath = path->projectPath = path->bpmPath = path->iniPath = path->csinputPath = path->divascriptPath = path->evdPath = NULL;
 
@@ -117,6 +120,12 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
 
             path->ppdPath = (char*)malloc((strlen(path->projectPath) + 20) * sizeof(char)); path->ppdPath[0] = 0;
             strcat(path->ppdPath, path->projectPath); strcat(path->ppdPath, "/"); strcat(path->ppdPath, path->difficultyChar); strcat(path->ppdPath, ".ppd");
+
+            path->targetScdPath = (char*)malloc((strlen(path->projectPath) + 20) * sizeof(char)); path->targetScdPath[0] = 0;
+            strcat(path->targetScdPath, path->projectPath); strcat(path->targetScdPath, "/"); strcat(path->targetScdPath, path->difficultyChar); strcat(path->targetScdPath, ".scd");
+    
+            path->scdPath = (char*)malloc((strlen(path->folderPath) + 20) * sizeof(char)); path->scdPath[0] = 0;
+            strcat(path->scdPath, path->folderPath); strcat(path->scdPath, "Data/scd.scd");
             
             path->csinputPath = (char*)malloc((strlen(path->folderPath) + 50) * sizeof(char)); path->csinputPath[0] = 0;
             strcat(path->csinputPath, path->folderPath); strcat(path->csinputPath, "Data/CSInput.fsml");
@@ -153,6 +162,9 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
 
             path->targetDivascriptPath = (char*)malloc((strlen(path->scriptFolderPath) + 50) * sizeof(char)); path->targetDivascriptPath[0] = 0;
             strcat(path->targetDivascriptPath, path->scriptFolderPath); strcat(path->targetDivascriptPath, "/DivaScript.fsml");
+
+            path->targetBpmPath = (char*)malloc((strlen(path->scriptFolderPath) + 50) * sizeof(char)); path->targetBpmPath[0] = 0;
+            strcat(path->targetBpmPath, path->scriptFolderPath); strcat(path->targetBpmPath, "/BPM.fsml");
         }
         else
         {
@@ -276,6 +288,18 @@ int freePath(Tpath* path)
     {
         free(path->difficultyChar);
     }
+    if (path->targetBpmPath != NULL)
+    {
+        free(path->targetBpmPath);
+    }
+    if (path->scdPath != NULL)
+    {
+        free(path->scdPath);
+    }
+    if (path->targetScdPath != NULL)
+    {
+        free(path->targetScdPath);
+    }
 
     return 0;
 }
@@ -336,8 +360,10 @@ int main(int argc, char** argv)
             mkdir(path.layerFolderPath, 0777);
             copyTextFile(path.csinputPath, path.targetCsinputPath, "wb");
             copyTextFile(path.divascriptPath, path.targetDivascriptPath, "wb");
+            copyTextFile(path.scdPath, path.targetScdPath, "wb");
             writeLayer(path.filePath, path.targetLayerPath, &chart);
             writePpdproj(path.ppdprojPath, path.difficultyChar, &chart);
+            writeBPM(path.targetBpmPath, &chart);
         }
     }
 
