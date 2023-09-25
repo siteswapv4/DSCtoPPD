@@ -98,6 +98,19 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath* path)
 
             path->filePath = strdup(argv[1]);
 
+            #ifdef _WIN32
+            if (containsUnsupportedChar(path->filePath))
+            {
+                printf("DSC file path contains unsupported characters (most likely japanese text).\nPlease make sure file and sub folders are not in japanese\n");
+                return 1;
+            }
+            if (containsUnsupportedChar(path->folderPath))
+            {
+                printf("DSCtoPPD.exe path contains unsupported characters (most likely japanese text)\nPlease make sure sub folders are not in japanese\n");
+                return 1;
+            }
+            #endif
+
             path->filename = extractFileName(path->filePath, 0);
 
             path->projectPath = (char*)malloc((strlen(path->outputFolderPath) + strlen(path->filename) + 100) * sizeof(char)); path->projectPath[0] = 0;
@@ -316,6 +329,7 @@ int main(int argc, char** argv)
         printf("Input number;\n1 : PPD project\n2 : PPD layer file (no BPM changes will be ported)\n3 : PPD score (playable chart)\n");
         if (scanf("%d",&operation) != 1) {
             printf("Wrong input\n");
+            fflush(stdin); getchar();
             return 1;
         }
         fflush(stdin);
@@ -327,6 +341,7 @@ int main(int argc, char** argv)
         printf("Input number;\n1 : Easy\n2 : Normal\n3 : Hard\n4 : Extreme\n5 : Base\n");
         if (scanf("%d",&difficulty) != 1) {
             printf("Wrong input\n");
+            fflush(stdin); getchar();
             return 1;
         }
         fflush(stdin);
@@ -335,6 +350,7 @@ int main(int argc, char** argv)
     if (initPath(argc, argv, operation, difficulty, &path))
     {
         freePath(&path);
+        fflush(stdin); getchar();
         return 1;
     }
 
@@ -368,6 +384,9 @@ int main(int argc, char** argv)
     }
 
     freePath(&path);
+
+    printf("\nPress Enter to leave\n");
+    fflush(stdin); getchar();
 
     return 0;
 }

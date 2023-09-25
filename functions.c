@@ -45,6 +45,21 @@ typedef struct
     bool isSlideR;
 }Tchart;
 
+int containsUnsupportedChar(char* string)
+{
+    int i;
+
+    for (i=0; i<strlen(string); i++)
+    {
+        if (string[i] == 63)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 /*
 Check if char is free, if not frees it
 */
