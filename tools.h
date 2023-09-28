@@ -1,4 +1,5 @@
 #ifdef _WIN32
+# if !defined(__MINGW32__) || (__MINGW64_VERSION_MAJOR < 3)
 #   include <stdarg.h>
 
     int vasprintf(char **sptr, char *fmt, va_list argv)
@@ -19,6 +20,7 @@
         va_end(argv);
         return retval;
     }
+# endif
 #endif
 
 
