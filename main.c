@@ -202,9 +202,9 @@ int main(int argc, char** argv)
         fflush(stdin);
     }
 
-    if (initPath(argc, argv, operation, difficulty, &path, &errmsg))
+    if (initPath(argc, argv, operation, difficulty, path, &errmsg))
     {
-        freePath(&path);
+        freePath(path);
         goto error;
     }
 
@@ -237,7 +237,7 @@ int main(int argc, char** argv)
         }
     }
 
-    freePath(&path);
+    freePath(path);
     goto end;
 
 error:
