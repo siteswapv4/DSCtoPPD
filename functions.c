@@ -728,8 +728,6 @@ int writeBPM(char* scriptFilePath, Tchart* chart)
         fprintf(bpm, "%f", chart->flyingTimeTiming.value[i]);
         fprintf(bpm, "\" />\n");
         fprintf(bpm, "    </Source>\n");
-
-        printf("TIME %f | FLYINGTIME : %d\n", chart->flyingTimeTiming.value[i], chart->flyingTime.value[i]);
     }
     fprintf(bpm, "  </Sources>\n");
     fprintf(bpm, "  <Flows />\n");
