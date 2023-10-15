@@ -231,6 +231,10 @@ int main(int argc, char** argv)
             copyTextFile(path[csinputPath], path[targetCsinputPath], "wb");
             copyTextFile(path[divascriptPath], path[targetDivascriptPath], "wb");
             copyTextFile(path[scdPath], path[targetScdPath], "wb");
+
+            chart.flyingTime.len = 0;
+            chart.flyingTimeTiming.len = 0;
+
             writeLayer(path[filePath], path[targetLayerPath], &chart);
             writePpdproj(path[ppdprojPath], path[difficultyChar], &chart);
             writeBPM(path[targetBpmPath], &chart);

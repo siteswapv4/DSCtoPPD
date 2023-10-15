@@ -515,6 +515,7 @@ int writeLayer(char* DSCPath, char* layerFilePath, Tchart* chart)
                 addIntToArray(hex, &(chart->flyingTime));
                 addFloatToArray(((currentTime / (float)1000) + chart->offset + ((float)hex / (float)1000) - 0.000001), &(chart->flyingTimeTiming));
             }
+
             hex = (fgetc(dsc)) | (fgetc(dsc) << 8) | (fgetc(dsc) << 16) | (fgetc(dsc) << 24);
         }
         //TARGET
@@ -713,7 +714,7 @@ int writeBPM(char* scriptFilePath, Tchart* chart)
         fprintf(bpm, "%f", tempFloat);
         fprintf(bpm, "\" />\n");
         fprintf(bpm, "      <Value Name=\"EndTime\" Value=\"");
-        if (chart->flyingTime.len == i+1)
+        if (chart->flyingTime.len-1 == i)
         {
             fprintf(bpm, "%f", chart->endTime);
         }
@@ -727,6 +728,8 @@ int writeBPM(char* scriptFilePath, Tchart* chart)
         fprintf(bpm, "%f", chart->flyingTimeTiming.value[i]);
         fprintf(bpm, "\" />\n");
         fprintf(bpm, "    </Source>\n");
+
+        printf("TIME %f | FLYINGTIME : %d\n", chart->flyingTimeTiming.value[i], chart->flyingTime.value[i]);
     }
     fprintf(bpm, "  </Sources>\n");
     fprintf(bpm, "  <Flows />\n");
