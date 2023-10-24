@@ -180,6 +180,8 @@ int main(int argc, char** argv)
     Tpath path = {0};
     Tchart chart = {0};
 
+    initChart(&chart);
+
     //Ask for layer, project or score
     while ((operation <= 0) || (operation >= 4))
     {
@@ -202,13 +204,20 @@ int main(int argc, char** argv)
         fflush(stdin);
     }
 
+    printf("Input offset in milliseconds : ");
+    if (scanf("%f",&chart.customOffset) != 1) {
+        errmsg = "Invalid input. Aborting...\n";
+        goto error;
+    }
+    fflush(stdin);
+
+    chart.customOffset /= 1000;
+
     if (initPath(argc, argv, operation, difficulty, path, &errmsg))
     {
         freePath(path);
         goto error;
     }
-
-    initChart(&chart);
 
     mkdir(path[outputFolderPath], 0777);
     mkdir(path[projectPath], 0777);
