@@ -1,5 +1,5 @@
 # DSC to PPD
-DSCtoPPD is a converter from Project Diva Arcade Future Tone charts (.dsc files) to Project Project Dxxx files (.ppd)__
+DSCtoPPD is a converter from Project Diva Arcade Future Tone charts (.dsc files) to Project Project Dxxx files (.ppd) 
 
 ## HOW TO USE
 
@@ -23,7 +23,7 @@ You can get the windows 64-bit version in the release tab on the right__
 
 ## COMPILE
 
-DSCtoPPD also compiles for linux and macos although there are no releases. Just use :__
-"gcc main.c -o DSCtoPPD -lm"__
-If you want to compile for Windows 32-bit or other versions of windows, you need a gcc compiler recent enough have std=c11 and use :__
-"gcc main.c -o DSCtoPPD.exe -D_POSIX_C_SOURCE=200809L -std=c11 -municode"__
+DSCtoPPD also compiles for linux and macos although there are no releases. Just use : 
+"gcc main.c -o DSCtoPPD -lm" 
+If you want to compile for Windows 32-bit or other versions of windows, you need a gcc compiler recent enough have std=c11 and use : 
+"gcc main.c -o DSCtoPPD.exe -D_POSIX_C_SOURCE=200809L -std=c11 -municode" 
