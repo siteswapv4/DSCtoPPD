@@ -11,7 +11,9 @@
 #include "functions.c"
 
 #ifdef _WIN32
-# define mkdir(X, Y) mkdir(X)
+#include <locale.h>
+#include <wchar.h>
+#include <windows.h>
 #endif
 
 
@@ -49,6 +51,22 @@ enum TpathIndexes
 };
 
 typedef char* Tpath[TPATH_LENGTH];
+
+void makeDirectory(char* path)
+{
+    #ifdef _WIN32
+    wchar_t* wspath;
+    long len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
+    wspath = calloc(len + 1, sizeof(wchar_t));
+    MultiByteToWideChar(CP_UTF8, 0, path, -1, &wspath[0], len);
+
+    _wmkdir(wspath);
+
+    free(wspath);
+    #else
+    mkdir(path, 0777);
+    #endif
+}
 
 /*
 Fills path strings by extracting the current folder location
@@ -98,19 +116,6 @@ int initPath(int argc, char** argv, int choice, int difficulty, Tpath path, char
             asprintf(&path[outputFolderPath], "%s%s", path[folderPath], outputFolder);
 
             path[filePath] = strdup(argv[1]);
-
-            #ifdef _WIN32
-            if (containsUnsupportedChar(path[filePath]))
-            {
-                *error = "DSC file path contains unsupported characters (most likely japanese text).\nPlease make sure file and sub folders are not in japanese\n";
-                return 1;
-            }
-            if (containsUnsupportedChar(path[folderPath]))
-            {
-                *error = "DSCtoPPD.exe path contains unsupported characters (most likely japanese text)\nPlease make sure sub folders are not in japanese\n";
-                return 1;
-            }
-            #endif
 
             path[filename] = extractFileName(path[filePath], 0);
 
@@ -173,12 +178,33 @@ int freePath(Tpath path)
     return 0;
 }
 
-int main(int argc, char** argv)
+#ifdef _WIN32
+int wmain(int argc, wchar_t* argv[])
+#else
+int main(int argc, char* argv[])
+#endif
 {
+    int i;
     char *errmsg;
     int operation = 0, difficulty = 0;
     Tpath path = {0};
     Tchart chart = {0};
+    char** arguments;
+
+    arguments = malloc(argc * sizeof(char*));
+    #ifdef _WIN32
+    for (i=0; i<argc; i++)
+    {
+        long len = WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, NULL, 0, NULL, NULL);
+        arguments[i] = calloc(len + 1, sizeof(char));
+        WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, &arguments[i][0], len, NULL, NULL);
+    }
+    #else
+    for (i=0; i<argc; i++)
+    {
+        arguments[i] = strdup(argv[i]);
+    }
+    #endif
 
     initChart(&chart);
 
@@ -213,14 +239,14 @@ int main(int argc, char** argv)
 
     chart.customOffset /= 1000;
 
-    if (initPath(argc, argv, operation, difficulty, path, &errmsg))
+    if (initPath(argc, arguments, operation, difficulty, path, &errmsg))
     {
         freePath(path);
         goto error;
     }
 
-    mkdir(path[outputFolderPath], 0777);
-    mkdir(path[projectPath], 0777);
+    makeDirectory(path[outputFolderPath]);
+    makeDirectory(path[projectPath]);
     writeLayer(path[filePath], path[layerPath], &chart);
     writeBPM(path[bpmPath], &chart);
     writeEvd(path[evdPath], &chart);
@@ -229,14 +255,14 @@ int main(int argc, char** argv)
     if (operation != 2)
     {
         writeIni(path[iniPath], &chart);
-        mkdir(path[soundFolderPath], 0777);
+        makeDirectory(path[soundFolderPath]);
         copyTextFile(path[soundPath], path[targetSoundPath], "wb");
         copyTextFile(path[soundsetPath], path[targetSoundsetPath], "wb");
 
         if (operation == 1)
         {
-            mkdir(path[scriptFolderPath], 0777);
-            mkdir(path[layerFolderPath], 0777);
+            makeDirectory(path[scriptFolderPath]);
+            makeDirectory(path[layerFolderPath]);
             copyTextFile(path[csinputPath], path[targetCsinputPath], "wb");
             copyTextFile(path[divascriptPath], path[targetDivascriptPath], "wb");
             copyTextFile(path[scdPath], path[targetScdPath], "wb");

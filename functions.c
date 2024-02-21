@@ -4,6 +4,31 @@
 #include <Windows.h>
 #endif
 
+FILE* openFile(char* path, char* mode)
+{
+    #ifdef _WIN32
+    FILE* res;
+    wchar_t* wspath, *wsmode;
+    long len;
+
+    len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
+    wspath = calloc(len + 1, sizeof(wchar_t));
+    MultiByteToWideChar(CP_UTF8, 0, path, -1, &wspath[0], len);
+
+    len = MultiByteToWideChar(CP_UTF8, 0, mode, -1, NULL, 0);
+    wsmode = calloc(len + 1, sizeof(wchar_t));
+    MultiByteToWideChar(CP_UTF8, 0, mode, -1, &wsmode[0], len);
+    
+    _wfopen_s(&res, wspath, wsmode);
+
+    free(wspath);
+    free(wsmode);
+    return res;
+    #else
+    return fopen(path, mode);
+    #endif
+}
+
 typedef struct
 {
     int len;
@@ -432,8 +457,8 @@ int writeLayer(char* DSCPath, char* layerFilePath, Tchart* chart)
     FILE* dsc = NULL;
     FILE* ppd = NULL;
 
-    dsc = fopen(DSCPath, "rb");
-    ppd = fopen(layerFilePath, "wb+");
+    dsc = openFile(DSCPath, "rb");
+    ppd = openFile(layerFilePath, "wb+");
 
     if (dsc == NULL)
     {
@@ -690,7 +715,7 @@ int writeBPM(char* scriptFilePath, Tchart* chart)
     FILE* bpm = NULL;
     int i = 0;
 
-    bpm = fopen(scriptFilePath, "wb");
+    bpm = openFile(scriptFilePath, "wb");
 
     if (bpm == NULL)
     {
@@ -748,7 +773,7 @@ write data.ini file, convert bpm and endtime
 int writeIni(char* iniPath, Tchart* chart)
 {
     FILE* ini = NULL;
-    ini = fopen(iniPath, "wb");
+    ini = openFile(iniPath, "wb");
 
     if (ini == NULL)
     {
@@ -788,7 +813,7 @@ write ppdproj file
 int writePpdproj(char* ppdprojPath, char* difficulty, Tchart* chart)
 {
     FILE* ppdproj = NULL;
-    ppdproj = fopen(ppdprojPath, "ab");
+    ppdproj = openFile(ppdprojPath, "ab");
 
     if (ppdproj == NULL)
     {
@@ -861,7 +886,7 @@ int writeEvd(char* evdPath, Tchart* chart)
     FILE* evd = NULL;
     int i = 0;
     
-    evd = fopen(evdPath, "wb");
+    evd = openFile(evdPath, "wb");
 
     if (evd == NULL)
     {
@@ -905,8 +930,8 @@ int copyTextFile(char* src, char* dest, char* mode)
     int i = 0;
     int len = 0;
 
-    copy = fopen(src, "rb");
-    paste = fopen(dest, mode);
+    copy = openFile(src, "rb");
+    paste = openFile(dest, mode);
 
     if ((copy == NULL) || (paste == NULL))
     {
@@ -948,12 +973,12 @@ int writePPD(char* PPDPath, char* layerFilePath, char* CSInputPath, char* DivaSc
     int bpmLen = 0;
     int eventLen = 0;
     
-    ppd = fopen(PPDPath, "wb");
-    layer = fopen(layerFilePath, "rb");
-    csinput = fopen(CSInputPath, "rb");
-    divascript = fopen(DivaScriptPath, "rb");
-    bpm = fopen(scriptFilePath, "rb");
-    event = fopen(basePpdPath, "rb");
+    ppd = openFile(PPDPath, "wb");
+    layer = openFile(layerFilePath, "rb");
+    csinput = openFile(CSInputPath, "rb");
+    divascript = openFile(DivaScriptPath, "rb");
+    bpm = openFile(scriptFilePath, "rb");
+    event = openFile(basePpdPath, "rb");
 
     if ((ppd == NULL) || (layer == NULL) || (csinput == NULL) || (divascript == NULL) || (bpm == NULL) || (event == NULL))
     {
