@@ -654,6 +654,13 @@ bool DTP_WriteEvd(const char* evdPath, DTP_Chart* chart)
         SDL_WriteIO(evd, &time, sizeof(float));
         SDL_IOprintf(evd, "%c", 9);
         SDL_WriteIO(evd, &tempFloat, sizeof(float));
+        
+        tempFloat = (240000.0f / (float)flyingTime->time);
+        
+        SDL_WriteIO(evd, &time, sizeof(float));
+        SDL_IOprintf(evd, "%c", 2);
+        SDL_WriteIO(evd, &tempFloat, sizeof(float));
+        SDL_IOprintf(evd, "%c", 1);
     }
 
     SDL_CloseIO(evd);
