@@ -1,7 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
 
-
 /* Returns directory path of given file path */
 char* DTP_GetDirectory(const char* path);
 

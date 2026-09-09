@@ -28,23 +28,41 @@ typedef struct
 
 const int DSC_OPCODE_LEN[DSC_OPCODE_MAX] = {0, 1, 4, 2, 2, 2, 7, 4, 2, 6, 2, 1, 6, 2, 1, 1, 3, 2, 3, 5, 5, 4, 4, 5, 2, 0, 2, 4, 2, 2, 1, 21, 0, 3, 2, 5, 1, 1, 7, 1, 1, 2, 1, 2, 1, 2, 3, 3, 1, 2, 2, 3, 6, 6, 1, 1, 2, 3, 1, 2, 2, 4, 4, 1, 2, 1, 2, 1, 1, 3, 3, 3, 2, 1, 9, 3, 2, 4, 2, 3, 2, 24, 1, 2, 1, 3, 1, 3, 4, 1, 2, 6, 3, 2, 3, 3, 4, 1, 1, 3, 3, 4, 1, 3, 3, 8, 2};
 
+#define NUM_DSC_HEADERS 10
+const Uint32 DSC_HEADERS[NUM_DSC_HEADERS] = {
+    353510679,
+    285614104,
+    335874337,
+    369295649,
+    352458520,
+    335745816,
+    335618838,
+    319956249,
+    319296802,
+    318845217
+};
 
 const char* PPD_HEADER = "PPD";
 
 
 bool DTP_IsDSC(SDL_IOStream* dsc)
 {
-    char header[5] = {33, 9, 5, 20, 0};
-    char actualHeader[5] = {0};
+    Uint32 header = 0;
     Sint64 position = SDL_TellIO(dsc);
 
     SDL_SeekIO(dsc, 0L, SDL_IO_SEEK_SET);
 
-    SDL_ReadIO(dsc, actualHeader, 4);
+    SDL_ReadIO(dsc, &header, sizeof(Uint32));
 
     SDL_SeekIO(dsc, position, SDL_IO_SEEK_SET);
     
-    return !SDL_strncmp(header, actualHeader, 4);
+    for (int i = 0; i < NUM_DSC_HEADERS; i++)
+    {
+        if (DSC_HEADERS[i] == header)
+            return true;
+    }
+
+    return false;
 }
 
 

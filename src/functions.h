@@ -2,7 +2,6 @@
 #include <SDL3/SDL.h>
 #include "ArrayList.h"
 
-
 typedef struct
 {
 	int distance;
@@ -11,13 +10,11 @@ typedef struct
 	int flyingTime;
 }DTP_Parameter;
 
-
 typedef struct
 {
 	int time;
 	float timing;
 }DTP_FlyingTime;
-
 
 typedef struct
 {
@@ -30,7 +27,6 @@ typedef struct
     ArrayList* parameters;
     ArrayList* flyingTimes;
 }DTP_Chart;
-
 
 bool DTP_WriteLayer(const char* DSCPath, const char* layerFilePath, DTP_Chart* chart);
 

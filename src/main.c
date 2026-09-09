@@ -5,7 +5,6 @@
 #include "functions.h"
 #include "data.h"
 
-
 enum TpathIndexes
 {
     folderPath,
@@ -33,9 +32,7 @@ enum TpathIndexes
     TPATH_LENGTH,
 };
 
-
 typedef char* Tpath[TPATH_LENGTH];
-
 
 int DTP_InitPath(int argc, char** argv, int choice, int difficulty, Tpath path, char** error)
 {
@@ -85,15 +82,15 @@ int DTP_InitPath(int argc, char** argv, int choice, int difficulty, Tpath path, 
             path[filename] = DTP_GetFilename(path[filePath]);
 
             SDL_asprintf(&path[projectPath],            "%s/%s",                    path[outputFolderPath], path[filename]);
-            SDL_asprintf(&path[layerPath],              "%s/%s.ppd",                path[projectPath], path[filename]);
+            SDL_asprintf(&path[layerPath],              "%s/layer0.ppd",            path[projectPath]);
             SDL_asprintf(&path[ppdprojPath],            "%s.ppdproj",               path[projectPath]);
             SDL_asprintf(&path[iniPath],                "%s/data.ini",              path[projectPath]);
             SDL_asprintf(&path[evdPath],                "%s/evd.txt",               path[projectPath]);
             SDL_asprintf(&path[ppdPath],                "%s/%s.ppd",                path[projectPath], path[difficultyChar]);
             SDL_asprintf(&path[targetScdPath],          "%s/%s.scd",                path[projectPath], path[difficultyChar]);
     
-            SDL_asprintf(&path[soundFolderPath],        "%s/Sound",                 path[projectPath]);
-            SDL_asprintf(&path[targetSoundPath],        "%s/Sound/sound.wav",       path[projectPath]);
+            SDL_asprintf(&path[soundFolderPath],        "%s/sound",                 path[projectPath]);
+            SDL_asprintf(&path[targetSoundPath],        "%s/sound/sound.wav",       path[projectPath]);
             SDL_asprintf(&path[targetSoundsetPath],     "%s/soundset.txt",          path[projectPath]);
 
             SDL_asprintf(&path[scriptFolderPath],       "%s/%s_Scripts",            path[projectPath],  path[difficultyChar]);
@@ -120,7 +117,6 @@ int DTP_InitPath(int argc, char** argv, int choice, int difficulty, Tpath path, 
 
     return 0;
 }
-
 
 int DTP_FreePath(Tpath path)
 {
@@ -184,6 +180,7 @@ int main(int argc, char* argv[])
         SDL_CreateDirectory(path[soundFolderPath]);
         DTP_WriteData(sound_wav, sound_wav_len, path[targetSoundPath]);
         DTP_WriteData(soundset_txt, soundset_txt_len, path[targetSoundsetPath]);
+        DTP_WriteData(scd_scd, scd_scd_len, path[targetScdPath]);
 
         if (operation == 1)
         {
@@ -192,7 +189,6 @@ int main(int argc, char* argv[])
             DTP_WriteData(CSInput_fsml, CSInput_fsml_len, path[targetCsinputPath]);
 			DTP_WriteData(DivaScript_fsml, DivaScript_fsml_len, path[targetDivascriptPath]);
             DTP_WriteData(BPM_fsml, BPM_fsml_len, path[targetBpmPath]);
-            DTP_WriteData(scd_scd, scd_scd_len, path[targetScdPath]);
 
 			freeArrayList(chart.flyingTimes, SDL_free);
 			freeArrayList(chart.parameters, SDL_free);
@@ -212,13 +208,15 @@ int main(int argc, char* argv[])
 
 error:
     fprintf(stderr, "%s", errmsg);
-    fgetc(stdin);
+    while (getchar() != '\n');
+    getchar();
     
     return 1;
 
 end:
     printf("\nPress Enter to leave\n");
-    fgetc(stdin);
+    while (getchar() != '\n');
+    getchar();
 
     return 0;
 }

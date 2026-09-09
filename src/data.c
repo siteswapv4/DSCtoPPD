@@ -5263,7 +5263,6 @@ unsigned char sound_wav[] = {
   0xef, 0xff, 0x07, 0x00, 0x1c, 0x00, 0xfc, 0xff, 0xf0, 0xff
 };
 
-
 unsigned int sound_wav_len = 25882;
 unsigned int soundset_txt_len = 10;
 unsigned int BPM_fsml_len = 2351;

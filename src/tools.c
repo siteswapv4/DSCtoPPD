@@ -1,6 +1,5 @@
 #include "tools.h"
 
-
 char* DTP_GetDirectory(const char* path)
 {
 	char* copy = SDL_strdup(path);
@@ -16,7 +15,6 @@ char* DTP_GetDirectory(const char* path)
     return copy;
 }
 
-
 char* DTP_GetFilename(const char* path)
 {
 	char* copy = NULL;
@@ -30,7 +28,7 @@ char* DTP_GetFilename(const char* path)
 	i++;
 	copy = SDL_strdup(&path[i]);
 	
-	for (; copy[i] != '\0'; i++)
+	for (i = 0; copy[i] != '\0'; i++)
 	{
 		if (copy[i] == '.')
 		{
