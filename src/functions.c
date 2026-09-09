@@ -360,6 +360,22 @@ bool DTP_WriteLayer(const char* DSCPath, const char* layerFilePath, DTP_Chart* c
 		            arrayListAdd(chart->flyingTimes, flyingTime);
 		        }
 		        break;
+		        
+	        case DSC_OPCODE_BARTIMESET:
+	            SDL_ReadIO(dsc, &temp, sizeof(Sint32));
+	            SDL_SeekIO(dsc, sizeof(Sint32), SDL_IO_SEEK_CUR);
+	            Uint32 flying_time = 60 * 4000 * temp;
+	            
+	            if ((chart->flyingTimes->len == 0) || (((DTP_FlyingTime*)chart->flyingTimes->data[chart->flyingTimes->len - 1])->time != temp))
+		        {
+		        	DTP_FlyingTime* flyingTime = SDL_malloc(sizeof(DTP_FlyingTime));
+		        	
+		        	flyingTime->time = flying_time;
+		        	flyingTime->timing = currentTime / 1000.0f + chart->offset - 0.000001f;
+		            
+		            arrayListAdd(chart->flyingTimes, flyingTime);
+		        }
+	            break;
         
         	case DSC_OPCODE_TARGET:
             	DTP_Note note;
